@@ -8,6 +8,7 @@ public class Battle {
     Player p;
     Enemy m;
     char level;
+    public int settingLife;
     public boolean status1 = true;
     public boolean status2 = true;
     public boolean status3 = true;
@@ -22,7 +23,8 @@ public class Battle {
         while(status1){
             status2 = true;
             status3 = true;
-            
+            settingLife = p.setLifeByLevel();
+            p.setPotion(2);
 
             //Level select feild
             while(status2){
@@ -55,12 +57,13 @@ public class Battle {
             char option;        
             while (status3) {
 
-                setLife();
                 Thread.sleep(1000);
                 App.clrscr();
 
                 System.out.println("__________________________________________\n");
                 System.out.println("     Your life: " + p.getLife() + "    Monster Life: " + m.getLife());
+                System.out.println(p.showPlayerLife(settingLife) + m.showMonsterLife());
+                
                 System.out.println("     Your level: " + p.getPlayerLevel());
                 System.out.println("     Your EXP: " + p.getEXP());
                 System.out.println("__________________________________________");
@@ -77,15 +80,14 @@ public class Battle {
                 System.out.println("――――――――――――――――――――――――――――――――――――――――――\n");
         
                 System.out.print("\nPlease type one of the options here: ");
+
                 option = s.next().charAt(0);
                 Thread.sleep(1000);
-                loading();
     
                 switch (Character.toLowerCase(option)) { 
                     //Attack
                     case 'a':
                         switchCaseAttack();
-
                         break;
                     
                     //Defense
@@ -96,45 +98,89 @@ public class Battle {
                     //Heal
                     case 'c':
                         App.clrscr();
+                        int lifeAfterotion;
+                        boolean potionStatus = true;
                         if(p.getPotion() > 0){
-                            System.out.println("\nYou have " + p.getPotion() +  " potions.");
+                            System.out.println("\nYour life is " + p.getLife() + ".");
                             Thread.sleep(1000);
-                            System.out.print("\nDo you want to use 1 potion? Y/N: ");
-                            char answer = s.next().charAt(0);
-                            if(Character.toLowerCase(answer) == 'y'){
-                                if(p.getPotion() <= 0){
-                                    System.out.println("\nYou do not have potions.");
-                                    Thread.sleep(2000);
-                                    break;
-                                }
-                                App.clrscr();
-                                Thread.sleep(1000);
-                                System.out.println("\nYou used your potion.");
-                                p.usePotion();
-                                Thread.sleep(2000);
-                                if(p.getPotion() <= 0){
-                                    System.out.println("\nYou used all potions.");
-                                    Thread.sleep(2000);
-                                    break;
-                                }else{
-                                    App.clrscr();
-                                    System.out.println("\nNow your life is " + p.getLife() + ".\n");
-                                    Thread.sleep(1500);
-                                    System.out.println("And your potion is " + p.getPotion() + " reft.");
-                                    Thread.sleep(2000);
-                                    break;
-                                }
-                            }else{
-                                System.out.println("\nYou did not use your potion.");
+                            System.out.println("And you have " + p.getPotion() +  " potions.");
+                            while(potionStatus){
                                 Thread.sleep(1500);
-                                break;
+                                System.out.print("\nDo you want to use 1 potion? Y/N: ");
+                                char answer = s.next().charAt(0);
+                                App.clrscr();
+                                Thread.sleep(2000);
+
+                                switch (Character.toLowerCase(answer)) {
+                                    case 'y':        
+                                        Thread.sleep(2000);                      
+                                        if(p.getLife() == settingLife){
+                                            System.out.println("\nYour life is maximum.");
+                                            Thread.sleep(2000);
+                                            potionStatus = false;
+                                            break;
+                                        }
+                                        if(p.getPotion() == 0){
+                                            System.out.println("\nYou do not have potions.");
+                                            Thread.sleep(2000);
+                                            potionStatus = false;
+                                            break;
+                                        }
+
+                                        App.clrscr();
+                                        Thread.sleep(1000);
+                                        System.out.println("\nYou used your potion.");
+                                        lifeAfterotion = p.lifeAfterPotion(25);
+                                        p.potionDecrement();
+                                        if(p.getLife() > settingLife){
+                                            p.setLifeByLevel();
+                                        }
+
+                                        Thread.sleep(2000);
+                                        
+                                        // App.clrscr();
+                                        Thread.sleep(1500);
+                                        System.out.println("\nNow your life is " + p.getLife() + ".");
+                                        Thread.sleep(2000);
+        
+                                        if(p.getPotion() <= 0){
+                                            System.out.println("\nAnd you used all potions.");
+                                            Thread.sleep(2000);
+                                            potionStatus = false;
+                                            break;
+                                        }else{
+                                            System.out.println("\nYour potion is " + p.getPotion() + " reft.");
+                                            Thread.sleep(2000);
+                                            potionStatus = false;
+                                            break;
+                                        }
+                                    
+                                    case 'n':
+                                        System.out.println("\nYou did not use your potion.");
+                                        Thread.sleep(1500);
+                                        potionStatus = false;
+                                        break;
+                                
+                                    default:
+                                        App.clrscr();
+                                        System.out.println("\nInvalid option. Please try again.");
+                                        Thread.sleep(2500);
+                                        App.clrscr();
+                                        break;
+                                }  
                             }
+                            break;
+
                         }else{
-                            System.out.println("You do not have any potion.");
                             Thread.sleep(1500);
+                            System.out.println("\nYou do not have any potion.");
+                            Thread.sleep(1500);
+                            potionStatus = false;
                             break;
                         }
-                    
+
+
+                            
                     //Run away
                     case 'd':
                         App.clrscr();
@@ -165,11 +211,11 @@ public class Battle {
         switch (Character.toLowerCase(level)) {
             case 'a':
                 App.clrscr();
-                m = new EasyMonster(20);
+                m = new EasyMonster(50);
                 Thread.sleep(1000);
-                System.out.println("\n*************************");
-                System.out.println("*   ESAY mode starts!  *");
-                System.out.println("*************************");
+                System.out.println("\n****************************");
+                System.out.println("*     ESAY mode starts!    *");
+                System.out.println("****************************");
                 status2 = false;                   
                 break;
 
@@ -177,9 +223,9 @@ public class Battle {
                 App.clrscr();  
                 m = new MediumMonster(100);
                 Thread.sleep(1000);
-                System.out.println("\n*************************");
-                System.out.println("*  MEDIUM mode starts!  *");
-                System.out.println("*************************");
+                System.out.println("\n****************************");
+                System.out.println("*    MEDIUM mode starts!   *");
+                System.out.println("****************************");
                 status2 = false;                    
                 break;
 
@@ -187,9 +233,9 @@ public class Battle {
                 App.clrscr();
                 m = new HardMonster(150);
                 Thread.sleep(1000);
-                System.out.println("\n*************************");
-                System.out.println("*   HARD mode starts!  *");
-                System.out.println("*************************");
+                System.out.println("\n****************************");
+                System.out.println("*     HARD mode starts!    *");
+                System.out.println("****************************");
                 status2 = false;
                 break;
                 
@@ -209,11 +255,9 @@ public class Battle {
     }
     
 
-
-
     void switchCaseAttack() throws InterruptedException {
         App.clrscr();
-        int playerAttack = p.attack(); 
+        int playerAttack = p.attack();
         int monsterAttack =  m.attack();
         boolean switchAstatus = true;
 
@@ -222,26 +266,18 @@ public class Battle {
             System.out.println("You attacked " + playerAttack + "!\n");
             Thread.sleep(2500);
             
-            //Showing "Critical hit"
-            if(playerAttack > 45){
-                System.out.println("\nCritical hit!!");
-            }
             m.getAttacked(playerAttack);
             checkMonsterLife();
             if(status3 == false){
                 switchAstatus = false;
                 break;
             }          
-
             Thread.sleep(1000);
     
             System.out.println("\n** Monster turn **");
             System.out.println("Monster atacked " + monsterAttack + "!\n");
             Thread.sleep(2500);
-            //Showing "Critical hit"
-            if(Math.abs(monsterAttack) < Math.abs(m.getMaxAttack() * (90/100))){
-                System.out.println("\nCritical hit!!");
-            }
+            
             p.getAttacked(monsterAttack);
             checkPlayerLife();
             if(status3 == false){
@@ -249,14 +285,14 @@ public class Battle {
                 break;
             }
 
-            Thread.sleep(1500);
+            Thread.sleep(1000);
             break;
 
         }
     }
 
     void checkMonsterLife() throws InterruptedException{
-        if(m.getLife() < 0){
+        if(m.getLife() <= 0){
             int gotEXP =  m.giveEXP();
             App.clrscr();
             System.out.println("\nMonster life is 0.");
@@ -274,7 +310,7 @@ public class Battle {
     }
     
     void checkPlayerLife() throws InterruptedException{
-        if(p.getLife() < 0){
+        if(p.getLife() <= 0){
             App.clrscr();
             System.out.println("\nYour life is 0.");
             Thread.sleep(3500);
@@ -284,8 +320,6 @@ public class Battle {
             status3 = false;
         }
     }
-
-    
 
 
 
@@ -304,73 +338,6 @@ public class Battle {
         System.out.println("\nBut it is decreased by " + monsterAttackCaseB/2 + "!\n");
         Thread.sleep(2000);
     }
-
-
-
-    void setLife(){
-        if(p.getPlayerLevel() > 6){
-            p.setLife(200);
-        }else if(p.getPlayerLevel() > 4){
-            p.setLife(150);
-        }else if(p.getPlayerLevel() >= 2){
-            p.setLife(100);
-        }else{
-            p.setLife(50);
-
-        }
-    }
-
-
-    // void switchCaseHeal() throws InterruptedException {
-    //     Scanner s = new Scanner(System.in);
-
-    //     App.clrscr();
-    //     if(p.getPotion() > 0){
-    //         System.out.println("\nYou have " + p.getPotion() +  " potions.");
-    //         Thread.sleep(1000);
-    //         System.out.print("\nDo you want to use 1 potion? Y/N: ");
-    //         char answer = s.next().charAt(0);
-    //         if(Character.toLowerCase(answer) == 'y'){
-    //             if(p.getPotion() <= 0){
-    //                 System.out.println("\nYou do not have potions.");
-    //                 Thread.sleep(2000);
-    //                 break;
-    //             }
-    //             App.clrscr();
-    //             Thread.sleep(1000);
-    //             System.out.println("\nYou used your potion.");
-    //             p.usePotion();
-    //             Thread.sleep(2000);
-    //             if(p.getPotion() <= 0){
-    //                 System.out.println("\nYou used all potions.");
-    //                 Thread.sleep(2000);
-    //                 break;
-    //             }else{
-    //                 App.clrscr();
-    //                 System.out.println("\nNow your life is " + p.getLife() + ".\n");
-    //                 Thread.sleep(1500);
-    //                 System.out.println("And your potion is " + p.getPotion() + " reft.");
-    //                 Thread.sleep(2000);
-    //                 break;
-    //             }
-    //         }else{
-    //             System.out.println("\nYou did not use your potion.");
-    //             Thread.sleep(1500);
-    //             break;
-    //         }
-    //     }else{
-    //         System.out.println("You do not have any potion.");
-    //         Thread.sleep(1500);
-    //         break;
-    //     }
-    // }
-
-
-    
-
-   
-
-
 
 
     void loading() throws InterruptedException {

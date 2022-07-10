@@ -6,7 +6,7 @@ public class App {
         Scanner s = new Scanner(System.in);
         Player p = new Player();
         Battle b = new Battle(p);
-
+        
         showWelcome();
         
         Thread.sleep(2000);
@@ -14,9 +14,7 @@ public class App {
 
         b.battle();
 
-        Thread.sleep(1000);
         clrscr();
-        
         showBye();
         Thread.sleep(2000);
         s.close();  
@@ -47,13 +45,6 @@ public class App {
 
 
     }
-
-
-    // public static void showHP(){
-    //     System.out.println("[■■■■■■■■■■■■■■■■■■■■■■■■■■■■■]");
-
-    //     String hp[] = [];
-    // }
    
 
 

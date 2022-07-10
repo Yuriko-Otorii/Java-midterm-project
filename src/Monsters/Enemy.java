@@ -33,5 +33,9 @@ public class Enemy {
     public int giveEXP(){
         return 10;
     }
+
+    public String showMonsterLife(){
+        return "";
+    }
     
 }
