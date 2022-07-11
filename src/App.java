@@ -16,6 +16,7 @@ public class App {
 
         clrscr();
         showBye();
+        
         Thread.sleep(2000);
         s.close();  
     }

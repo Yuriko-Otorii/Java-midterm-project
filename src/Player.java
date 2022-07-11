@@ -38,11 +38,11 @@ public class Player {
 
     int attack(){
         Random r = new Random();
-        if(this.playerLevel > 6){
+        if(this.playerLevel >= 6){
             return r.nextInt(80-50) + 50;
-        }else if(this.playerLevel > 4){
+        }else if(this.playerLevel >= 4){
             return r.nextInt(60-30) + 30;
-        }else if(this. playerLevel > 2){
+        }else if(this. playerLevel >= 2){
             return r.nextInt(40-15) + 15;
         }else{
             return r.nextInt(30-1) + 1;
@@ -120,76 +120,6 @@ public class Player {
             }
         }
 
-        
-
-        // if(this.getLife() <= life*.1){
-        //     for(int i=0; i < 1; i++){
-        //         playerLife.add("■");
-        //     }
-        //     for(int i=0; i <= 9; i++){
-        //         playerLife.add(" ");
-        //     }            
-        // }else if(this.getLife() <= life*.2){
-        //     for(int i=0; i < 2; i++){
-        //         playerLife.add("■");
-        //     }
-        //     for(int i=0; i <= 8; i++){
-        //         playerLife.add(" ");
-        //     } 
-        // }else if(this.getLife() <= life*.3){
-        //     for(int i=0; i < 3; i++){
-        //         playerLife.add("■");
-        //     }
-        //     for(int i=0; i <= 7; i++){
-        //         playerLife.add(" ");
-        //     } 
-        // }else if(this.getLife() <= life*.4){
-        //     for(int i=0; i < 4; i++){
-        //         playerLife.add("■");
-        //     }
-        //     for(int i=0; i <= 6; i++){
-        //         playerLife.add(" ");
-        //     } 
-        // }else if(this.getLife() <= life*.5){
-        //     for(int i=0; i < 5; i++){
-        //         playerLife.add("■");
-        //     }
-        //     for(int i=0; i <= 5; i++){
-        //         playerLife.add(" ");
-        //     } 
-        // }else if(this.getLife() <= life*.6){
-        //     for(int i=0; i < 6; i++){
-        //         playerLife.add("■");
-        //     }
-        //     for(int i=0; i <= 4; i++){
-        //         playerLife.add(" ");
-        //     } 
-        // }else if(this.getLife() <= life*.7){
-        //     for(int i=0; i < 7; i++){
-        //         playerLife.add("■");
-        //     }
-        //     for(int i=0; i <= 3; i++){
-        //         playerLife.add(" ");
-        //     } 
-        // }else if(this.getLife() <= life*.8){
-        //     for(int i=0; i < 8; i++){
-        //         playerLife.add("■");
-        //     }
-        //     for(int i=0; i <= 2; i++){
-        //         playerLife.add(" ");
-        //     } 
-        // }else if(this.getLife() <= life*.9){
-        //     for(int i=0; i < 9; i++){
-        //         playerLife.add("■");
-        //     }
-        //     for(int i=0; i <= 1; i++){
-        //         playerLife.add(" ");
-        //     } 
-        // }else{
-        //     for(int i=0; i < 10; i++){
-        //         playerLife.add("■");
-        //     }
-        // }
 
         String z = String.join("", playerLife);
         String x = "     [" + z + "]";
